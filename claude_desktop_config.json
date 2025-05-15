@@ -1,105 +1,15 @@
 {
-  "name": "Salesforce/nCino Analyzer",
-  "version": "1.0.0",
-  "description": "Analyze Salesforce/nCino configurations for naming conventions and security patterns",
-  "icon": "⚙️",
-  "port": 3000,
-  "startup_command": "python mcp_server.py",
-  "mcp": {
-    "enabled": true,
-    "api_key": "${MCP_API_KEY}"
-  },
-  "resources": [
-    {
-      "id": "salesforce.fields",
-      "name": "Salesforce Field Definitions",
-      "description": "Field definitions from Salesforce/nCino objects"
-    },
-    {
-      "id": "salesforce.validationRules",
-      "name": "Salesforce Validation Rules",
-      "description": "Validation rule definitions from Salesforce/nCino objects"
-    },
-    {
-      "id": "salesforce.triggers",
-      "name": "Salesforce Apex Triggers",
-      "description": "Apex trigger definitions from Salesforce/nCino objects"
+    "mcpServers": {
+        "salesforce-analyzer": {
+            "command": "python",
+            "args": [
+                "-m",
+                "mcp_server.py"
+            ],
+            "env": {
+                "MCP_API_KEY": "your_mcp_api_key_here",
+                "PORT": "3000"
+            }
+        }
     }
-  ],
-  "tools": [
-    {
-      "id": "salesforce.extractMetadata",
-      "name": "Extract Salesforce Metadata",
-      "description": "Extract metadata from a Salesforce org"
-    },
-    {
-      "id": "salesforce.analyzeNamingConventions",
-      "name": "Analyze Naming Conventions",
-      "description": "Analyze field naming conventions against nCino standards"
-    },
-    {
-      "id": "salesforce.analyzeValidationRules",
-      "name": "Analyze Validation Rule Bypass Patterns",
-      "description": "Detect bypass patterns in validation rules"
-    },
-    {
-      "id": "salesforce.analyzeApexTriggers",
-      "name": "Analyze Apex Trigger Bypass Patterns",
-      "description": "Detect bypass patterns in Apex triggers"
-    },
-    {
-      "id": "salesforce.generateReport",
-      "name": "Generate Comprehensive Report",
-      "description": "Generate a comprehensive report combining all analyses"
-    }
-  ],
-  "prompt_templates": [
-    {
-      "id": "salesforce.basicAnalysis",
-      "name": "Basic Salesforce/nCino Analysis",
-      "description": "Analyze Salesforce/nCino configuration for basic issues"
-    },
-    {
-      "id": "salesforce.securityAnalysis",
-      "name": "Salesforce/nCino Security Analysis",
-      "description": "Analyze Salesforce/nCino configuration for security issues"
-    }
-  ],
-  "environment_variables": [
-    {
-      "name": "MCP_API_KEY",
-      "description": "API key for the MCP server",
-      "required": true
-    },
-    {
-      "name": "PORT",
-      "description": "Port for the MCP server",
-      "default": "3000"
-    }
-  ],
-  "setup_instructions": "1. Set the MCP_API_KEY environment variable\n2. Install dependencies with 'pip install -r requirements.txt'\n3. Start the server with 'python mcp_server.py'\n4. Connect to Claude Desktop",
-  "usage_examples": [
-    "Can you analyze my Salesforce field naming conventions? I'll upload the metadata through the MCP connection.",
-    "Please check my validation rules for security bypass patterns using the MCP tools.",
-    "Generate a comprehensive report on my Salesforce/nCino configuration security."
-  ],
-  "dependencies": {
-    "python": ">=3.9",
-    "packages": [
-      "mcp-python-sdk",
-      "aiohttp",
-      "aiofiles",
-      "pandas",
-      "xmltodict",
-      "simple-salesforce",
-      "python-dotenv"
-    ]
-  },
-  "author": "nCino",
-  "license": "MIT",
-  "repository": "https://github.com/ncinotimo/Salesforce-Analyser-Py",
-  "support": {
-    "documentation": "https://github.com/ncinotimo/Salesforce-Analyser-Py/tree/main/docs",
-    "issues": "https://github.com/ncinotimo/Salesforce-Analyser-Py/issues"
-  }
 }
