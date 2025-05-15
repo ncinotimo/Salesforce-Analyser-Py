@@ -8,7 +8,7 @@ This project implements an MCP server that provides specialized tools for analyz
 
 ## Features
 
-- **Claude Desktop Integration**: Seamlessly connect to Claude Desktop using the included configuration
+- **Claude Desktop Integration**: Seamlessly connect to Claude Desktop using the included configuration file
 - **MCP Integration**: Connect to Claude and other LLMs using the Model Context Protocol
 - **Metadata Analysis**: Analyze field naming conventions, validation rules, and Apex triggers
 - **Security Assessment**: Detect bypass patterns and security vulnerabilities
@@ -22,17 +22,32 @@ This project implements an MCP server that provides specialized tools for analyz
    pip install -r requirements.txt
    ```
 
-2. **Start the MCP server**:
-   ```bash
-   python mcp_server.py
+2. **Configure Claude Desktop**:
+   - Edit the `claude_desktop_config.json` file with your desired settings
+   - Add it to your Claude Desktop configuration directory, or
+   - Add the `salesforce-analyzer` section to your existing configuration
+
+   ```json
+   {
+       "mcpServers": {
+           "salesforce-analyzer": {
+               "command": "python",
+               "args": [
+                   "-m",
+                   "mcp_server.py"
+               ],
+               "env": {
+                   "MCP_API_KEY": "your_mcp_api_key_here",
+                   "PORT": "3000"
+               }
+           }
+       }
+   }
    ```
 
-3. **Connect to Claude Desktop**:
-   - Open Claude Desktop
-   - Go to Settings > Integrations > Add Integration
-   - Select "From Configuration File"
-   - Browse to and select `claude_desktop_config.json` from this repository
-   - Follow the setup instructions in the UI
+3. **Start Claude Desktop**:
+   - Launch the Claude Desktop application
+   - It will automatically start the Salesforce Analyzer MCP server when needed
 
 4. **Start analyzing**:
    - Upload your Salesforce metadata files to Claude
@@ -66,7 +81,9 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Starting the MCP Server
+### Starting the MCP Server Manually
+
+If you want to start the server manually instead of through Claude Desktop:
 
 ```bash
 # Set environment variables (optional)
