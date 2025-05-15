@@ -27,49 +27,53 @@ Claude Desktop is an application that allows you to use Claude locally with acce
    pip install -r requirements.txt
    ```
 
-3. Set up environment variables (or use Claude Desktop's environment variable UI):
-   ```bash
-   # Create a .env file
-   echo "MCP_API_KEY=your_custom_api_key" > .env
-   echo "PORT=3000" >> .env
-   ```
+3. Configure Claude Desktop to run the MCP server.
 
-## Connecting to Claude Desktop
+## Configuring Claude Desktop
 
-### Method 1: Using the Configuration File
+Claude Desktop uses a configuration file to manage MCP servers. You have two options for configuration:
 
-1. Open Claude Desktop
-2. Go to Settings > Integrations > Add Integration
-3. Select "From Configuration File"
-4. Browse to and select the `claude_desktop_config.json` file from this repository
-5. Follow the setup instructions in the UI
+### Option 1: Use the Provided Configuration File
 
-### Method 2: Manual Configuration
+1. Locate the Claude Desktop configuration directory (typically in your user profile)
+2. Copy the `claude_desktop_config.json` file from this repository to that location
+3. Edit the file to update paths and environment variables as needed
 
-1. Open Claude Desktop
-2. Go to Settings > Integrations > Add Integration
-3. Select "MCP Server"
-4. Enter the following details:
-   - Name: Salesforce/nCino Analyzer
-   - Description: Analyze Salesforce/nCino configurations for naming conventions and security patterns
-   - URL: http://localhost:3000 (or your custom port)
-   - API Key: Your MCP API key from the .env file
-5. Save the configuration
+### Option 2: Add to Existing Configuration
 
-## Starting the Server
+If you already have a Claude Desktop configuration file, add the Salesforce Analyzer to it:
 
-Before you can use the analyzer in Claude Desktop, you need to start the MCP server:
-
-```bash
-# Start the MCP server
-python mcp_server.py
+```json
+{
+    "mcpServers": {
+        "existing-server": { ... },
+        
+        "salesforce-analyzer": {
+            "command": "python",
+            "args": [
+                "-m",
+                "mcp_server.py"
+            ],
+            "env": {
+                "MCP_API_KEY": "your_mcp_api_key_here",
+                "PORT": "3000"
+            }
+        }
+    }
+}
 ```
 
-You should see output indicating that the server is running on the specified port.
+### Important Configuration Settings
 
-## Using the Integration in Claude Desktop
+- **command**: Specifies the command to run the server (usually `python`)
+- **args**: The arguments to pass to the command (the path to `mcp_server.py`)
+- **env**: Environment variables needed by the server:
+  - **MCP_API_KEY**: Your custom API key for security
+  - **PORT**: The port to run the server on (default: 3000)
 
-Once the integration is set up and the server is running, you can use the Salesforce/nCino Analyzer in your conversations with Claude.
+## Using the Salesforce Analyzer in Claude Desktop
+
+Once configured, Claude Desktop will automatically start the Salesforce Analyzer MCP server when needed.
 
 ### Example Prompts
 
@@ -112,14 +116,22 @@ Claude will display the analysis results directly in the chat. The results may i
 
 ## Troubleshooting
 
-### Server Connection Issues
+### MCP Server Not Starting
+
+If the MCP server doesn't start:
+
+1. Make sure the path to `mcp_server.py` is correct in your configuration
+2. Check that all dependencies are installed
+3. Verify Python is in your PATH
+4. Look at the Claude Desktop logs for error messages
+
+### Connection Issues
 
 If Claude can't connect to the MCP server:
 
-1. Verify the server is running (`python mcp_server.py`)
-2. Check that the port matches in both the server and Claude Desktop configuration
-3. Ensure the API keys match
-4. Check for any firewall issues
+1. Check that the port specified in the configuration is available
+2. Ensure the API keys match between Claude Desktop and the server
+3. Check for any firewall issues
 
 ### File Format Issues
 
@@ -128,14 +140,6 @@ If Claude has trouble processing your metadata files:
 1. Make sure the files are in supported formats (JSON, XML, CSV)
 2. Check that the file structure matches the expected format
 3. Try using a smaller subset of data first
-
-### Integration Not Appearing
-
-If the Salesforce/nCino Analyzer integration doesn't appear in Claude Desktop:
-
-1. Verify the `claude_desktop_config.json` file is properly formatted
-2. Restart Claude Desktop
-3. Check the Claude Desktop logs for any errors
 
 ## Best Practices
 
@@ -147,7 +151,7 @@ If the Salesforce/nCino Analyzer integration doesn't appear in Claude Desktop:
 
 ## Limitations
 
-- Claude Desktop must be able to access localhost (or wherever the MCP server is running)
+- Claude Desktop must be able to start Python processes
 - Large metadata files may take longer to process
 - Some visualization capabilities depend on Claude Desktop's rendering abilities
 
